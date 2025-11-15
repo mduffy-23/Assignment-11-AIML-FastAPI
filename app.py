@@ -32,7 +32,7 @@ feature_names = [
 ]
 
 # Database
-conn = psycopg2.connect(os.getenv('DATABASE_URL'))
+conn = psycopg2.connect(os.getenv('DATABASE_URL'), sslmode="require")
 cursor = conn.cursor()
 
 def log_prediction(input_data, output_data):
