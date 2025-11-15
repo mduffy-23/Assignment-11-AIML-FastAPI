@@ -29,10 +29,6 @@ feature_names = [
 ## Create FastAPI instance
 app = FastAPI()
 
-## Serve static files
-app.mount("/static", StaticFiles(directory="frontend", html=True), name="static")
-
-
 ## Define prediction endpoint
 @app.post("/predict")
 def predict(data: SalesLagFeatures):
@@ -49,3 +45,6 @@ def predict(data: SalesLagFeatures):
     prediction = float(model.predict(dmatrix)[0])
 
     return {"prediction": round(prediction, 2)}
+
+# Mount Frontend
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
