@@ -3,3 +3,4 @@ uvicorn
 pydantic
 xgboost
 numpy
+psycopg2
