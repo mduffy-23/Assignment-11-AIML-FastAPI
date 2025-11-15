@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import xgboost as xgb
 import numpy as np
+import psycopg2
 
 class SalesLagFeatures(BaseModel):
     Sales_M_1: float
@@ -25,6 +26,17 @@ feature_names = [
     "Sales_M_6"
 ]
 
+# Database
+conn = psycopg2.connect('postgresql://assignment11modellogs_user:MQm5DZXgI9Z0J7TkYJreKY8GreBawbQo@dpg-d4cdrpjipnbc739di4gg-a.ohio-postgres.render.com/assignment11modellogs')
+cursor = conn.cursor()
+
+def log_prediction(input_data, output_data):
+    cursor.execute(
+        "INSERT INTO predictions (M1, M2, M3, M4, M5, M6, Prediction) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+        (*input_data, output_data)
+    )
+    conn.commit()
+
 # FastAPI
 ## Create FastAPI instance
 app = FastAPI()
@@ -43,6 +55,8 @@ def predict(data: SalesLagFeatures):
 
     dmatrix = xgb.DMatrix(input_data, feature_names=feature_names)
     prediction = float(model.predict(dmatrix)[0])
+
+    log_prediction(input_data[0], prediction)
 
     return {"prediction": round(prediction, 2)}
 
