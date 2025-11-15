@@ -1,5 +1,6 @@
 import psycopg2
 
+# We create the table with external connection, so no need to use environment variables here
 DATABASE_URL = "postgresql://assignment11modellogs_user:MQm5DZXgI9Z0J7TkYJreKY8GreBawbQo@dpg-d4cdrpjipnbc739di4gg-a.ohio-postgres.render.com/assignment11modellogs"
 
 # Connect to the database

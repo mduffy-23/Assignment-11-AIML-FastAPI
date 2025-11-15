@@ -5,6 +5,11 @@ from pydantic import BaseModel
 import xgboost as xgb
 import numpy as np
 import psycopg2
+import os
+from dotenv import load_dotenv
+
+if os.getenv("RENDER") != "true":  # Render sets this automatically
+    load_dotenv()
 
 class SalesLagFeatures(BaseModel):
     Sales_M_1: float
@@ -27,7 +32,7 @@ feature_names = [
 ]
 
 # Database
-conn = psycopg2.connect('postgresql://assignment11modellogs_user:MQm5DZXgI9Z0J7TkYJreKY8GreBawbQo@dpg-d4cdrpjipnbc739di4gg-a.ohio-postgres.render.com/assignment11modellogs')
+conn = psycopg2.connect(os.getenv('DATABASE_URL'))
 cursor = conn.cursor()
 
 def log_prediction(input_data, output_data):

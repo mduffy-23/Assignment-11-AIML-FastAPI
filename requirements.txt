@@ -4,3 +4,5 @@ pydantic
 xgboost
 numpy
 psycopg2
+os
+dotenv
