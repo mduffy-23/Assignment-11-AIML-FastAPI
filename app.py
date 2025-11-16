@@ -32,13 +32,18 @@ feature_names = [
 ]
 
 # Database
-conn = psycopg2.connect(os.getenv('DATABASE_URL'), sslmode="require")
+conn = psycopg2.connect(os.getenv('DATABASE_URL'))
 cursor = conn.cursor()
 
 def log_prediction(input_data, output_data):
+    # Convert all numpy types to pure Python
+    clean_input = [float(x) for x in input_data]
+    clean_output = float(output_data)
+
+    cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO predictions (M1, M2, M3, M4, M5, M6, Prediction) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-        (*input_data, output_data)
+        (*clean_input, clean_output)
     )
     conn.commit()
 
